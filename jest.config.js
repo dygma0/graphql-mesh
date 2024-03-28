@@ -11,7 +11,7 @@ const tsconfig = JSON5.parse(tsconfigStr);
 
 process.env.LC_ALL = 'en_US';
 
-const testMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'];
+let testMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'];
 
 if (process.env.LEAK_TEST) {
   testMatch.push('!**/examples/grpc-*/**');
@@ -41,6 +41,12 @@ if (process.version.startsWith('v21.')) {
   testMatch.push('!**/examples/sqlite-chinook/**');
 }
 const ESM_PACKAGES = ['prettier'];
+
+if (process.env.E2E_TEST) {
+  testMatch = ['**/e2e/**/?(*.)+(spec|test).[jt]s?(x)'];
+} else {
+  testMatch.push('!**/e2e/**/?(*.)+(spec|test).[jt]s?(x)');
+}
 
 module.exports = {
   testEnvironment: 'node',
